@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "OrderPlacedEvent",
+  "namespace": "com.example.techstore.order.event",
+  "fields": [
+    { "name": "orderId", "type": "long" },
+    { "name": "email", "type": "string" },
+    { "name": "firstName", "type": "string" },
+    { "name": "totalPrice", "type": "string" },
+    { "name": "itemsCount", "type": "int" }
+  ]
+}
