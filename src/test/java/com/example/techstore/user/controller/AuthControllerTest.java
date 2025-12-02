@@ -60,6 +60,6 @@ class AuthControllerTest {
         mockMvc.perform(post("/api/v1/auth/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 }

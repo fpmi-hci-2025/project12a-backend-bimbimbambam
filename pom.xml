@@ -46,7 +46,6 @@
             **/security/**,
             **/event/**,
             **/notification/**,
-            **/controller/**,
             **/*Application.*
         </sonar.exclusions>
     </properties>
