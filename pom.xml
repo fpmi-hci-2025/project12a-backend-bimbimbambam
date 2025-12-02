@@ -42,6 +42,10 @@
             **/config/**,
             **/exception/**,
             **/util/**,
+            **/repository/**,
+            **/security/**,
+            **/event/**,
+            **/notification/**,
             **/*Application.*
         </sonar.exclusions>
     </properties>
