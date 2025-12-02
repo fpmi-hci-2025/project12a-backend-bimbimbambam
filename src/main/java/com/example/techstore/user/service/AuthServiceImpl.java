@@ -1,6 +1,6 @@
 package com.example.techstore.user.service;
 
-import com.example.techstore.common.util.ErrorsUtil;
+import com.example.techstore.common.util.JwtTokenUtils;
 import com.example.techstore.user.dto.JwtRequest;
 import com.example.techstore.user.dto.JwtResponse;
 import com.example.techstore.user.dto.SaveUserDTO;
@@ -9,12 +9,10 @@ import com.example.techstore.user.model.User;
 import com.example.techstore.user.security.CustomUserDetails;
 import com.example.techstore.user.security.CustomUserDetailsService;
 import com.example.techstore.user.util.AuthException;
-import com.example.techstore.common.util.JwtTokenUtils;
 import com.example.techstore.user.util.UserException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,21 +22,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
-    private final Logger LOG = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     @Override
     public JwtResponse createAuthToken(JwtRequest authRequest) {
-        LOG.info("Attempting to authenticate user: {}", authRequest.getUsername());
-        try{
+        log.info("Attempting to authenticate user: {}", authRequest.getUsername());
+        try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            LOG.error("Authentication failed for user: {}", authRequest.getUsername(), e);
+            log.error("Authentication failed for user: {}", authRequest.getUsername(), e);
             throw new AuthException("Incorrect login or password!");
         }
 
