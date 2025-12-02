@@ -10,24 +10,26 @@ import com.example.techstore.user.util.AuthException;
 import com.example.techstore.user.util.UserException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${application.endpoint.auth.root}")
+@RequestMapping("/api/v1/auth")
+@Slf4j
 public class AuthController {
     private final AuthService authService;
-    private final Logger LOG = LoggerFactory.getLogger(AuthController.class);
 
-    @PostMapping(path = "${application.endpoint.auth.sign-in}")
+    @PostMapping("/sign-in")
     public ResponseEntity<JwtResponse> createAuthToken(@RequestBody @Valid JwtRequest authRequest, BindingResult bindingResult) {
 
-        LOG.info("Received auth request: {}", authRequest);
+        log.info("Received auth request for user: {}", authRequest.getUsername());
 
         if (bindingResult.hasErrors()) {
             String errorMsg = ErrorsUtil.getErrorMsg(bindingResult);
@@ -39,7 +41,7 @@ public class AuthController {
                 .body(authService.createAuthToken(authRequest));
     }
 
-    @PostMapping(path = "${application.endpoint.auth.sign-up}")
+    @PostMapping("/sign-up")
     public ResponseEntity<UserDTO> createNewUser(@RequestBody @Valid SaveUserDTO saveUserDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {

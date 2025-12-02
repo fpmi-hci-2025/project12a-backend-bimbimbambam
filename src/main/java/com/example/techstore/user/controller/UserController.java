@@ -18,10 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
 @RestController
-@RequestMapping("${application.endpoint.users.root}")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -41,7 +39,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
-    @PatchMapping(path = "${application.endpoint.users.id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@Parameter(hidden = true) @RequestHeader("Authorization") String authorizationHeader,
                                               @PathVariable("id") Long id, @RequestBody @Valid SaveUserDTO saveUserDTO, BindingResult bindingResult) {
 
@@ -57,7 +55,7 @@ public class UserController {
                 .body(userService.updateUserById(id, saveUserDTO, jwtToken));
     }
 
-    @DeleteMapping(path = "${application.endpoint.users.id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@Parameter(hidden = true) @RequestHeader("Authorization") String authorizationHeader,
                                                  @PathVariable("id") Long id) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
@@ -66,27 +64,22 @@ public class UserController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("${application.endpoint.users.id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.getUserById(id));
     }
 
-    @PostMapping(path = "${application.endpoint.users.assign-admin}")
+    @PostMapping("/{id}/assign-admin")
     public ResponseEntity<UserDTO> assignAdminRole(@PathVariable("id") Long id) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.assignAdminRole(id));
     }
 
-    @GetMapping(path = "${application.endpoint.users.exists}")
+    @GetMapping("/{id}/exists")
     public ResponseEntity<Boolean> userExists(@PathVariable("id") Long id) {
         return ResponseEntity.ok(userService.existsById(id));
-    }
-
-    @GetMapping(path = "${application.endpoint.users.info}")
-    public String userData(Principal principal){
-        return principal.getName();
     }
 }
