@@ -40,7 +40,9 @@
             **/model/**,
             **/dto/**,
             **/config/**,
-            **/exception/**
+            **/exception/**,
+            **/util/**,
+            **/*Application.*
         </sonar.exclusions>
     </properties>
     <repositories>

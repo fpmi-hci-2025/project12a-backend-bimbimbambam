@@ -55,12 +55,10 @@ class ReviewServiceImplTest {
         Product product = new Product();
         product.setId(productId);
 
-        // Mock User and Product
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
         when(reviewRepository.existsByUserIdAndProductId(userId, productId)).thenReturn(false);
 
-        // Mock Purchase History (Order)
         Order order = new Order();
         order.setStatus(OrderStatus.COMPLETED);
         OrderItem item = new OrderItem();
@@ -68,19 +66,17 @@ class ReviewServiceImplTest {
         order.setItems(List.of(item));
         when(orderRepository.findByUserId(userId)).thenReturn(List.of(order));
 
-        // Mock Save
         Review savedReview = new Review();
         savedReview.setUser(user);
         savedReview.setProduct(product);
         when(reviewRepository.save(any(Review.class))).thenReturn(savedReview);
         when(modelMapper.map(any(), eq(ReviewResponseDTO.class))).thenReturn(new ReviewResponseDTO());
 
-        // Call
         ReviewResponseDTO result = reviewService.addReview(userId, reviewDTO);
 
         assertNotNull(result);
         verify(reviewRepository).save(any(Review.class));
-        verify(productRepository).save(product); // Verifies rating update
+        verify(productRepository).save(product);
     }
 
     @Test

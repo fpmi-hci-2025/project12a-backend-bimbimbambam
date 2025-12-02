@@ -67,7 +67,6 @@ class ComparisonServiceImplTest {
 
         comparisonService.toggleProduct(USER_ID, 10L);
 
-        // Should update Redis with empty set
         verify(valueOperations).set(eq(COMPARE_KEY), argThat(set -> ((Set)set).isEmpty()), any());
     }
 
